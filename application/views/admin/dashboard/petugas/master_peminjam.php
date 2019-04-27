@@ -19,7 +19,7 @@
       <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
             <li class="active">Dashboard</li>
-            <li class="active">Master Data Anggota</li>
+            <li class="active">Master Data Peminjaman Buku</li>
           </ol>
     </section>
     <!-- Main content -->
@@ -39,43 +39,54 @@
                       </div>
                 <?php } ?>
                 <div class="box-header">
-                  <h3 class="box-title">Data Anggota
-                    <a class="btn btn-flat btn-success btn-sm" id="tambahBuku"><i class="fa fa-plus" > Tambah</i></a>
+                  <h3 class="box-title">Data Peminjaman Buku
                   </h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                  <table id="dataAnggota" class="table table-bordered table-hover">
+                  <table id="dataBuku" class="table table-bordered table-hover">
 
                     <thead>
                       <tr>
                         <th>No</th>
-                        <th>Kode Anggota</th>
-                        <th>Nama Anggota</th>
-                        <th>Prodi</th>
-                        <th>Jenjang</th>
-                        <th>Alamat</th>
+                        <th>Nama Peminjam</th>
+                        <th>Petugas Yang Melayani</th>
+                        <th>Judul Buku</th>
+                        <th>Tanggal Peminjaman</th>
+                        <th>Tanggal Mengembalikan</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
                      <?php
                      $i = 1;
-                     foreach ($anggota as $item){  ?>
+                     foreach ($peminjam as $item){  ?>
                       <tr>
                         <td><?=$i++;?></td>
-                        <td><?=$item->Kd_Anggota;?></td>
-                        <td><?=$item->Nama;?></td>
-                        <td><?=$item->Prodi;?></td>
-                        <td><?=$item->Jenjang;?></td>
-                        <td><?=$item->Alamat;?></td>
+                        <td><?=$item->anggota;?></td>
+                        <td><?=$item->petugas;?></td>
+                        <td><?=$item->JudulBuku;?></td>
+                        <td><?=$item->Tgl_pinjam;?></td>
+                        <?php if($item->Tgl_kembali == NULL || $item->Tgl_kembali == 0000-00-00){ ?>
                         <td>
-                            <a href="<?=base_url("/Perpustakaan/hapus/anggota/{$item->Kd_Anggota}");?>" onclick="return confirm('Yakin Hapus Buku <?=$item->Nama ?>?')" class="btn btn-danger btn-xs" alt="Hapus Kusri"><i class="fa fa-trash"></i> Hapus</a>
+                          <a href="<?=base_url("/Perpustakaan/kembali/{$item->Kd_pinjam}");?>" class="btn btn-success btn-xs"><i class="fa fa-pencil"></i> Buku Kembali Hari ini ?</a>
+                        </td>
+                        <?php }else{ ?>
+                        <td>
+                          <?=$item->Tgl_kembali;?>
+                        </td>
+                        <?php } ?>
+                        <td>
+                            <a href="<?=base_url("/Perpustakaan/hapus/peminjam/{$item->Kd_pinjam}");?>" onclick="return confirm('Yakin Hapus Buku <?=$item->JudulBuku ?>?')" class="btn btn-danger btn-xs" alt="Hapus Kusri"><i class="fa fa-trash"></i> Hapus</a>
                             <a 
-                              data-id_anggota="<?=$item->Kd_Anggota?>"
-                              data-nama = "<?=$item->Nama?>"
-                              data-prodi = "<?=$item->Prodi?>"
-                              data-jenjang = "<?=$item->Jenjang?>"
-                              data-alamat = "<?=$item->Alamat?>"
+                              data-id_pinjam="<?=$item->Kd_pinjam?>"
+                              data-judul = "<?=$item->JudulBuku?>"
+                              data-id_buku = "<?=$item->Kd_register?>"
+                              data-anggota = "<?=$item->anggota?>"
+                              data-id_anggota = "<?=$item->Kd_anggota?>"
+                              data-petugas = "<?=$item->petugas?>"
+                              data-id_petugas = "<?=$item->Kd_petugas?>"
+                              data-pinjam = "<?=$item->Tgl_pinjam?>"
+                              data-kembali = "<?=$item->Tgl_kembali?>"
                               class="btn btn-warning btn-xs editbuku" alt="edit Buku"><i class="fa fa-pencil"> Edit</i></a>
                         </td>
                       </tr>
@@ -84,11 +95,11 @@
                     <tfoot>
                       <tr>
                         <th>No</th>
-                        <th>Kode Anggota</th>
-                        <th>Nama Anggota</th>
-                        <th>Prodi</th>
-                        <th>Jenjang</th>
-                        <th>Alamat</th>
+                        <th>Nama Peminjam</th>
+                        <th>Petugas Yang Melayani</th>
+                        <th>Judul Buku</th>
+                        <th>Tanggal Peminjaman</th>
+                        <th>Tanggal Mengembalikan</th>
                         <th>Aksi</th>
                       </tr>
                     </tfoot>
@@ -98,96 +109,57 @@
 
             </div><!-- /.col -->
           </div><!-- /.row -->
-
-          <!-- Modal -->
-          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                          <h4 class="modal-title" id="myModalLabel">Tambah Anggota</h4>
-                      </div>
-                      <div class="modal-body">
-
-                          <form class="form-horizontal" method="POST" action="<?php echo base_url('Perpustakaan/addNew/anggota');?>" enctype="multipart/form-data">
-                              <div class="form-group">
-                                  <label class="col-md-4 control-label">Nama Anggota</label>
-                                  <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="nama">
-                                      <small class="help-block"></small>
-                                  </div>
-                              </div>
-                              <div class="form-group">
-                                  <label class="col-md-4 control-label">Prodi</label>
-                                  <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="prodi">
-                                      <small class="help-block"></small>
-                                  </div>
-                              </div>
-                              <div class="form-group">
-                                  <label class="col-md-4 control-label">Jenjang</label>
-                                  <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="jenjang">
-                                      <small class="help-block"></small>
-                                  </div>
-                              </div>
-                              <div class="form-group">
-                                  <label class="col-md-4 control-label">Alamat</label>
-                                  <div class="col-md-6">
-                                    <textarea class="form-control" name="alamat"></textarea>
-                                  </div>
-                              </div>
-                              <div class="form-group">
-                                  <div class="col-md-6 col-md-offset-4">
-                                      <button type="submit" class="btn btn-primary" id="button-reg">
-                                          Simpan
-                                      </button>
-                                  </div>
-                              </div>
-                          </form>
-
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <!--end of Modal -->
           <!-- Modal -->
           <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                   <div class="modal-content">
                       <div class="modal-header">
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                          <h4 class="modal-title" id="myModalLabel">Edit Anggota</h4>
+                          <h4 class="modal-title" id="myModalLabel">Edit Peminjaman</h4>
                       </div>
                       <div class="modal-body">
 
-                          <form class="form-horizontal" method="POST" action="<?php echo base_url('Perpustakaan/update/anggota');?>" enctype="multipart/form-data">
-                              <input type="hidden" name="id">
+                          <form class="form-horizontal" method="POST" action="<?php echo base_url('Perpustakaan/update/peminjam');?>" enctype="multipart/form-data">
+                              <input type="hidden" name="id_pinjam">
+                              <input type="hidden" name="id_buku">
+                              <input type="hidden" name="id_anggota">
                               <div class="form-group">
-                                  <label class="col-md-4 control-label">Nama Anggota</label>
+                                  <label class="col-md-4 control-label">Nama Peminjam</label>
                                   <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="nama">
+                                      <input type="text" class="form-control" name="peminjam" disabled>
                                       <small class="help-block"></small>
                                   </div>
                               </div>
                               <div class="form-group">
-                                  <label class="col-md-4 control-label">Prodi</label>
+                                  <label class="col-md-4 control-label">Nama Petugas</label>
                                   <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="prodi">
+                                      <select class="form-control" name="petugas" >
+                                          <?php  foreach ($petugas as $data) { ?>
+                                          <option value="<?=$data->Kd_Petugas?>"><?=$data->Nama?></option>
+                                          <?php } ?>
+                                      </select>
                                       <small class="help-block"></small>
                                   </div>
                               </div>
                               <div class="form-group">
-                                  <label class="col-md-4 control-label">Jenjang</label>
+                                  <label class="col-md-4 control-label">Judul Buku</label>
                                   <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="jenjang">
+                                      <input type="text" class="form-control" name="judul" disabled>
                                       <small class="help-block"></small>
                                   </div>
                               </div>
                               <div class="form-group">
-                                  <label class="col-md-4 control-label">Alamat</label>
-                                  <div class="col-md-6">
-                                    <textarea class="form-control" name="alamat"></textarea>
+                                  <label class="col-md-4 control-label">Tanggal Peminjaman</label>
+                                  <div class="col-md-6 has-error">
+                                      <input type="date" class="form-control" name="pinjam">
+                                      <small class="help-block"></small>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-md-4 control-label">Tanggal Mengembalikan</label>
+                                  <div class="col-md-6 has-error">
+                                      <input type="date" class="form-control" name="kembali">
+                                      <small class="help-block"></small>
                                   </div>
                               </div>
                               <div class="form-group">
@@ -223,7 +195,7 @@
     <script>
       $(function () {
 
-        $('#dataAnggota').DataTable({"pageLength": 10});
+        $('#dataBuku').DataTable({"pageLength": 10});
 
          $('#tambahBuku').click(function(){
             $('input+small').text('');
@@ -240,18 +212,22 @@
             $('input').parent().removeClass('has-error');
             $('select').parent().removeClass('has-error');
 
+            //alert($(this).attr('data-id_petugas'));
+
             $('#myModal2').modal('show');
 
             var form = "#myModal2";
 
-            $(form).find('input[name="id"]').val($(this).attr('data-id_anggota'));
-            $(form).find('input[name="nama"]').val($(this).attr('data-nama'));
-            $(form).find('input[name="prodi"]').val($(this).attr('data-prodi'));
-            $(form).find('input[name="jenjang"]').val($(this).attr('data-jenjang'));
-            $(form).find('textarea[name="alamat"]').val($(this).attr('data-alamat'));
+            $(form).find('input[name="id_buku"]').val($(this).attr('data-id_buku'));
+            $(form).find('input[name="id_pinjam"]').val($(this).attr('data-id_pinjam'));
+            $(form).find('input[name="id_anggota"]').val($(this).attr('data-id_anggota'));
 
-            insert = $(form).find('#formEditKelas').attr('action')+"/"+$(this).attr('data-id_kursi');
-            $(form).find('#formEditKelas').attr('action',insert);
+            $(form).find('input[name="peminjam"]').val($(this).attr('data-anggota'));
+            $(form).find('input[name="judul"]').val($(this).attr('data-judul'));
+            $(form).find('input[name="pinjam"]').val($(this).attr('data-pinjam'));
+            $(form).find('input[name="kembali"]').val($(this).attr('data-kembali'));
+            $(form).find('option:selected').val($(this).attr('data-id_petugas'));
+
             //console.log('test');
 
             return false;

@@ -5,14 +5,15 @@ class Perpustakaan extends CI_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
 
 		$this->load->model('DataMaster_Buku');
 		$this->load->model('DataMaster_Anggota');
+		$this->load->model('DataMaster_Peminjaman');
 
 		$this->md_buku = $this->DataMaster_Buku;
 		$this->md_ang = $this->DataMaster_Anggota;
+		$this->md_pem = $this->DataMaster_Peminjaman;
 	}
 	public function petugas()
 	{
@@ -25,6 +26,13 @@ class Perpustakaan extends CI_Controller {
 	public function index()
 	{
 		redirect( base_url() );
+	}
+	public function listPeminjaman()
+	{
+		$data['peminjam'] = $this->md_pem->list_all();
+		$data['petugas'] = $this->md_pem->petugas();
+		//var_dump($data);
+		$this->load->view('admin/dashboard/petugas/master_peminjam',$data);
 	}
 	public function listBuku()
 	{
@@ -122,6 +130,10 @@ class Perpustakaan extends CI_Controller {
 				$this->md_ang->hapusAnggota($id);
 			    redirect(base_url('Perpustakaan/listAnggota'));
 			break;
+			case 'peminjam':
+				$this->md_pem->hapusPeminjaman($id);
+			    redirect(base_url('Perpustakaan/listPeminjaman'));
+			break;
 			default:
 				redirect( base_url() );
 			break;
@@ -147,7 +159,7 @@ class Perpustakaan extends CI_Controller {
 					// validasi
 					$this->form_validation->set_rules('judul', 'Judul Buku', 'required');
 					if(!$this->form_validation->run()) {
-						$this->session->set_flashdata('msg_alert_error', 'Gagal Menambah data Buku');
+						$this->session->set_flashdata('msg_alert_error', 'Gagal Update data Buku');
 						redirect( base_url('Perpustakaan/listBuku') );
 					}
 
@@ -172,7 +184,7 @@ class Perpustakaan extends CI_Controller {
 					// validasi
 					$this->form_validation->set_rules('nama', 'Nama Anggot', 'required');
 					if(!$this->form_validation->run()) {
-						$this->session->set_flashdata('msg_alert_error', 'Gagal Menambah data Anggot');
+						$this->session->set_flashdata('msg_alert_error', 'Gagal Updata Anggot');
 						redirect( base_url('Perpustakaan/listAnggota') );
 					}
 
@@ -186,9 +198,87 @@ class Perpustakaan extends CI_Controller {
 					redirect(base_url('Perpustakaan/listAnggota'));
 				}
 			break;
+			case 'peminjam':
+				if( $_SERVER['REQUEST_METHOD'] == 'POST') {
+					$id_buku= $this->security->xss_clean( $this->input->post('id_buku'));
+					$id_peminjam= $this->security->xss_clean( $this->input->post('id_anggota'));
+					$id_pinjam= $this->security->xss_clean( $this->input->post('id_pinjam'));
+					$id_petugas= $this->security->xss_clean( $this->input->post('petugas'));
+					$kembali= $this->security->xss_clean( $this->input->post('kembali'));
+					$pinjam= $this->security->xss_clean( $this->input->post('pinjam'));
+
+					// validasi
+					$this->form_validation->set_rules('pinjam', 'Nama Anggot', 'required');
+					if(!$this->form_validation->run()) {
+						$this->session->set_flashdata('msg_alert_error', 'Gagal update data Peminjaman');
+						redirect( base_url('Perpustakaan/listPeminjaman') );
+					}
+
+					$id = $id_pinjam;
+
+					$data['Kd_anggota'] = $id_peminjam;
+					$data['Kd_petugas'] = $id_petugas;
+
+		            $item['Kd_register'] = $id_buku;
+					$item['Tgl_kembali'] = $kembali;
+					$item['Tgl_pinjam'] = $pinjam;
+					//$data['sekarang'] = date('Y-m-d');
+
+					//var_dump($data);
+					$this->md_pem->updateTbPeminjaman($id,$data);
+					$this->md_pem->updateTbDetailPinjam($id,$item);
+					redirect(base_url('Perpustakaan/listPeminjaman'));
+				}
+			break;
 			default:
 				redirect( base_url() );
 				break;
+		}
+	}
+	public function kembali()
+	{
+		$id = $this->uri->segment('3');
+
+		$item['Tgl_kembali'] = date('Y-m-d');
+		$this->md_pem->bukuKembali($id,$item);
+		//var_dump($id);
+		redirect(base_url('Perpustakaan/listPeminjaman'));
+	}
+	public function pinjamBuku()
+	{
+		$data['petugas'] = $this->md_pem->petugas();
+		$data['anggota'] = $this->md_pem->anggota();
+		$data['buku'] = $this->md_pem->buku();
+		//var_dump($data);
+		$this->load->view('admin/dashboard/anggota/peminjaman_buku',$data);
+	}
+	public function riwayatPeminjam()
+	{
+		$data['peminjam'] = $this->md_pem->list_all();
+		$this->load->view('admin/dashboard/anggota/riwayat_peminjaman',$data);
+	}
+	public function peminjaman()
+	{
+		if( $_SERVER['REQUEST_METHOD'] == 'POST') {
+			$buku= $this->security->xss_clean( $this->input->post('buku'));
+			$petugas= $this->security->xss_clean( $this->input->post('petugas'));
+			$anggota= $this->security->xss_clean( $this->input->post('anggota'));
+			
+			// validasi
+			$this->form_validation->set_rules('anggota', 'Nama Anggot', 'required');
+			if(!$this->form_validation->run()) {
+				$this->session->set_flashdata('msg_alert_error', 'Gagal Meminjam Buku');
+				redirect( base_url('Perpustakaan/pinjamBuku') );
+			}
+
+			$data['Kd_anggota'] = $anggota;
+			$data['Kd_petugas'] = $petugas;
+
+			$item['Kd_register'] = $buku;
+			$item['Tgl_pinjam'] = date('Y-m-d');
+			$this->md_pem->peminjaman($data,$item);
+
+			redirect(base_url('Perpustakaan/riwayatPeminjam'));
 		}
 	}
 }
