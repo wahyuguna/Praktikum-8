@@ -71,11 +71,11 @@
                         <td>
                             <a href="<?=base_url("/Perpustakaan/hapus/anggota/{$item->Kd_Anggota}");?>" onclick="return confirm('Yakin Hapus Buku <?=$item->Nama ?>?')" class="btn btn-danger btn-xs" alt="Hapus Kusri"><i class="fa fa-trash"></i> Hapus</a>
                             <a 
-                              data-id_buku="<?=$item->Kd_Anggota?>"
-                              data-judul = "<?=$item->Nama?>"
-                              data-pengarang = "<?=$item->Prodi?>"
-                              data-penerbit = "<?=$item->Jenjang?>"
-                              data-tahun = "<?=$item->Alamat?>"
+                              data-id_anggota="<?=$item->Kd_Anggota?>"
+                              data-nama = "<?=$item->Nama?>"
+                              data-prodi = "<?=$item->Prodi?>"
+                              data-jenjang = "<?=$item->Jenjang?>"
+                              data-alamat = "<?=$item->Alamat?>"
                               class="btn btn-warning btn-xs editbuku" alt="edit Buku"><i class="fa fa-pencil"> Edit</i></a>
                         </td>
                       </tr>
@@ -109,33 +109,32 @@
                       </div>
                       <div class="modal-body">
 
-                          <form class="form-horizontal" method="POST" action="<?php echo base_url('Perpustakaan/addNew/buku');?>" enctype="multipart/form-data">
+                          <form class="form-horizontal" method="POST" action="<?php echo base_url('Perpustakaan/addNew/anggota');?>" enctype="multipart/form-data">
                               <div class="form-group">
-                                  <label class="col-md-4 control-label">Judul Buku</label>
+                                  <label class="col-md-4 control-label">Nama Anggota</label>
                                   <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="judul">
+                                      <input type="text" class="form-control" name="nama">
                                       <small class="help-block"></small>
                                   </div>
                               </div>
                               <div class="form-group">
-                                  <label class="col-md-4 control-label">Nama Pengarang</label>
+                                  <label class="col-md-4 control-label">Prodi</label>
                                   <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="pengarang">
+                                      <input type="text" class="form-control" name="prodi">
                                       <small class="help-block"></small>
                                   </div>
                               </div>
                               <div class="form-group">
-                                  <label class="col-md-4 control-label">Penerbit</label>
+                                  <label class="col-md-4 control-label">Jenjang</label>
                                   <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="penerbit">
+                                      <input type="text" class="form-control" name="jenjang">
                                       <small class="help-block"></small>
                                   </div>
                               </div>
                               <div class="form-group">
-                                  <label class="col-md-4 control-label">Tahun Terbit</label>
-                                  <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="tahun">
-                                      <small class="help-block"></small>
+                                  <label class="col-md-4 control-label">Alamat</label>
+                                  <div class="col-md-6">
+                                    <textarea class="form-control" name="alamat"></textarea>
                                   </div>
                               </div>
                               <div class="form-group">
@@ -162,34 +161,33 @@
                       </div>
                       <div class="modal-body">
 
-                          <form class="form-horizontal" method="POST" action="<?php echo base_url('Perpustakaan/update/buku');?>" enctype="multipart/form-data">
+                          <form class="form-horizontal" method="POST" action="<?php echo base_url('Perpustakaan/update/anggota');?>" enctype="multipart/form-data">
                               <input type="hidden" name="id">
                               <div class="form-group">
-                                  <label class="col-md-4 control-label">Judul Buku</label>
+                                  <label class="col-md-4 control-label">Nama Anggota</label>
                                   <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="judul">
+                                      <input type="text" class="form-control" name="nama">
                                       <small class="help-block"></small>
                                   </div>
                               </div>
                               <div class="form-group">
-                                  <label class="col-md-4 control-label">Nama Pengarang</label>
+                                  <label class="col-md-4 control-label">Prodi</label>
                                   <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="pengarang">
+                                      <input type="text" class="form-control" name="prodi">
                                       <small class="help-block"></small>
                                   </div>
                               </div>
                               <div class="form-group">
-                                  <label class="col-md-4 control-label">Penerbit</label>
+                                  <label class="col-md-4 control-label">Jenjang</label>
                                   <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="penerbit">
+                                      <input type="text" class="form-control" name="jenjang">
                                       <small class="help-block"></small>
                                   </div>
                               </div>
                               <div class="form-group">
-                                  <label class="col-md-4 control-label">Tahun Terbit</label>
-                                  <div class="col-md-6 has-error">
-                                      <input type="text" class="form-control" name="tahun">
-                                      <small class="help-block"></small>
+                                  <label class="col-md-4 control-label">Alamat</label>
+                                  <div class="col-md-6">
+                                    <textarea class="form-control" name="alamat"></textarea>
                                   </div>
                               </div>
                               <div class="form-group">
@@ -246,11 +244,11 @@
 
             var form = "#myModal2";
 
-            $(form).find('input[name="id"]').val($(this).attr('data-id_buku'));
-            $(form).find('input[name="judul"]').val($(this).attr('data-judul'));
-            $(form).find('input[name="penerbit"]').val($(this).attr('data-penerbit'));
-            $(form).find('input[name="pengarang"]').val($(this).attr('data-pengarang'));
-            $(form).find('input[name="tahun"]').val($(this).attr('data-tahun'));
+            $(form).find('input[name="id"]').val($(this).attr('data-id_anggota'));
+            $(form).find('input[name="nama"]').val($(this).attr('data-nama'));
+            $(form).find('input[name="prodi"]').val($(this).attr('data-prodi'));
+            $(form).find('input[name="jenjang"]').val($(this).attr('data-jenjang'));
+            $(form).find('textarea[name="alamat"]').val($(this).attr('data-alamat'));
 
             insert = $(form).find('#formEditKelas').attr('action')+"/"+$(this).attr('data-id_kursi');
             $(form).find('#formEditKelas').attr('action',insert);

@@ -14,6 +14,14 @@ class Perpustakaan extends CI_Controller {
 		$this->md_buku = $this->DataMaster_Buku;
 		$this->md_ang = $this->DataMaster_Anggota;
 	}
+	public function petugas()
+	{
+		$this->load->view('admin/dashboard/index');
+	}
+	public function anggota()
+	{
+		$this->load->view('admin/dashboard/anggota/index');
+	}
 	public function index()
 	{
 		redirect( base_url() );
@@ -63,6 +71,29 @@ class Perpustakaan extends CI_Controller {
 					redirect(base_url('Perpustakaan/listBuku'));
 				}
 				break;
+				case 'anggota':
+				if( $_SERVER['REQUEST_METHOD'] == 'POST') {
+					$nama= $this->security->xss_clean( $this->input->post('nama'));
+					$jenjang= $this->security->xss_clean( $this->input->post('jenjang'));
+					$prodi= $this->security->xss_clean( $this->input->post('prodi'));
+					$alamat= $this->security->xss_clean( $this->input->post('alamat'));
+
+					// validasi
+					$this->form_validation->set_rules('nama', 'Nama Anggot', 'required');
+					if(!$this->form_validation->run()) {
+						$this->session->set_flashdata('msg_alert_error', 'Gagal Menambah data Anggot');
+						redirect( base_url('Perpustakaan/listAnggota') );
+					}
+
+		            $data['Nama'] = $nama;
+					$data['Jenjang'] = $jenjang;
+					$data['Prodi'] = $prodi;
+					$data['Alamat'] = $alamat;
+					$this->md_ang->tambahAnggota($data);
+
+					redirect(base_url('Perpustakaan/listAnggota'));
+				}
+				break;
 			default:
 				redirect( base_url() );
 				break;
@@ -86,6 +117,10 @@ class Perpustakaan extends CI_Controller {
 			case 'buku':
 				$this->md_buku->hapusBuku($id);
 			    redirect(base_url('Perpustakaan/listBuku'));
+			break;
+			case 'anggota':
+				$this->md_ang->hapusAnggota($id);
+			    redirect(base_url('Perpustakaan/listAnggota'));
 			break;
 			default:
 				redirect( base_url() );
@@ -124,6 +159,31 @@ class Perpustakaan extends CI_Controller {
 					// var_dump($data);
 					$this->md_buku->updateBuku($id,$data);
 					redirect(base_url('Perpustakaan/listBuku'));
+				}
+			break;
+			case 'anggota':
+				if( $_SERVER['REQUEST_METHOD'] == 'POST') {
+					$id= $this->security->xss_clean( $this->input->post('id'));
+					$nama= $this->security->xss_clean( $this->input->post('nama'));
+					$jenjang= $this->security->xss_clean( $this->input->post('jenjang'));
+					$prodi= $this->security->xss_clean( $this->input->post('prodi'));
+					$alamat= $this->security->xss_clean( $this->input->post('alamat'));
+
+					// validasi
+					$this->form_validation->set_rules('nama', 'Nama Anggot', 'required');
+					if(!$this->form_validation->run()) {
+						$this->session->set_flashdata('msg_alert_error', 'Gagal Menambah data Anggot');
+						redirect( base_url('Perpustakaan/listAnggota') );
+					}
+
+		            $data['Nama'] = $nama;
+					$data['Jenjang'] = $jenjang;
+					$data['Prodi'] = $prodi;
+					$data['Alamat'] = $alamat;
+
+					// var_dump($data);
+					$this->md_ang->updateAnggota($id,$data);
+					redirect(base_url('Perpustakaan/listAnggota'));
 				}
 			break;
 			default:

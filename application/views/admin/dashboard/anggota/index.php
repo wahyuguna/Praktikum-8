@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
-<?php $this->load->view('admin/layout/head') ?>
+<?php $this->load->view('admin/layoutA/head') ?>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
-  <?php $this->load->view('admin/layout/header') ?>
+  <?php $this->load->view('admin/layoutA/header') ?>
   <!-- Left side column. contains the logo and sidebar -->
-  <?php $this->load->view('admin/layout/sidebar') ?>
+  <?php $this->load->view('admin/layoutA/sidebar') ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -31,10 +31,10 @@
             <!-- /.box-header -->
              <div class="box box-default">
               <div class="box-header with-border">
-                <h3 class="box-title">Dashboard Petugas</h3>
+                <h3 class="box-title">Dashboard Anggota</h3>
               </div>
               <div class="box-body">
-                Selamat Anda Berhasil Login Sebagai Petugas
+                Selamat Anda Berhasil Login Sebagai Anggota
               </div>
               
               <!-- /.box-body -->
@@ -48,13 +48,13 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <?php $this->load->view('admin/layout/footer') ?>
+  <?php $this->load->view('admin/layoutA/footer') ?>
 
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
-<?php $this->load->view('admin/layout/scrip') ?>
+<?php $this->load->view('admin/layoutA/scrip') ?>
 </body>
 </html>
