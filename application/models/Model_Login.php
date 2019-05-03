@@ -28,6 +28,6 @@ class Model_Login extends CI_Model {
 		$item['id'] = $id;
 		$this->db->insert('tb_user', $item);
 
-		$this->session->set_flashdata('msg_alert', 'Daftar Sebagai Petugas Berhasil');
+		$this->session->set_flashdata('msg_alert', 'Daftar Sebagai Petugas Perpustaan Berhasil');
 	}
 }
