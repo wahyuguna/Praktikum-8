@@ -42,6 +42,7 @@
                         <?=$this->session->flashdata('msg_alert');?>
                     </div>
                 <?php } ?>
+                <?php if($this->session->userdata('id') != NULL) {?>
                 <form method="POST" action="<?php echo base_url('Perpustakaan/peminjaman/');?>" enctype="multipart/form-data">
                   <div class="box-body">
                     <div class="form-group">
@@ -53,14 +54,7 @@
                         <?php } ?>
                       </select>
                     </div>
-                    <div class="form-group">
-                      <label>Pilih Nama Petugas</label>
-                        <select class="form-control" name="petugas" id="petugas" >
-                            <?php foreach ($petugas as $data) {?>
-                            <option value="<?=$data->Kd_Petugas?>"><?=$data->Nama?></option>
-                            <?php } ?>
-                        </select>    
-                    </div>
+                    <input type="hidden" name="petugas" value="<?php echo $this->session->userdata('id');?>" >
                     <div class="form-group">
                       <label>Pilih Buku</label>
                         <select class="form-control" name="buku" >
@@ -74,7 +68,15 @@
                      <input type="submit" name="submit" value="Pinjam" class="btn btn-success">
                     </div>
                   </div>
-                 </form> 
+                 </form>
+                 <?php }else{ ?>
+                  <div class="alert alert-danger">
+                       <h3>Tidak Ada Petugas Yang Aktif !!!</h3>
+                  </div>
+                 <div class="alert alert-warning">
+                       <h3>Segera Hubungi Petugas</h3>
+                  </div>
+                 <?php } ?> 
                 
               </div><!-- /.box-body -->
             </div><!-- /.box -->

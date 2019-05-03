@@ -17,11 +17,20 @@ class Perpustakaan extends CI_Controller {
 	}
 	public function petugas()
 	{
-		$this->load->view('admin/dashboard/index');
+		//var_dump($this->session->userdata());
+		if($this->session->userdata('level')==='1'){
+			$this->load->view('admin/dashboard/index');
+		}else{
+			redirect(base_url('Login/index'));
+		}
 	}
 	public function anggota()
 	{
-		$this->load->view('admin/dashboard/anggota/index');
+		//if($this->session->userdata('level')==='2'){
+			$this->load->view('admin/dashboard/anggota/index');
+		// }else{
+		// 	echo "Access Denied";
+		// }
 	}
 	public function index()
 	{
@@ -29,22 +38,34 @@ class Perpustakaan extends CI_Controller {
 	}
 	public function listPeminjaman()
 	{
-		$data['peminjam'] = $this->md_pem->list_all();
-		$data['petugas'] = $this->md_pem->petugas();
-		//var_dump($data);
-		$this->load->view('admin/dashboard/petugas/master_peminjam',$data);
+		if($this->session->userdata('level')==='1'){
+			$data['peminjam'] = $this->md_pem->list_all();
+			$data['petugas'] = $this->md_pem->petugas();
+			//var_dump($data);
+			$this->load->view('admin/dashboard/petugas/master_peminjam',$data);
+		}else{
+			echo "Access Denied";
+		}
 	}
 	public function listBuku()
 	{
-		$data['buku'] = $this->md_buku->list_all();
-		//var_dump($data);
-		$this->load->view('admin/dashboard/petugas/master_buku',$data);
+		if($this->session->userdata('level')==='1'){
+			$data['buku'] = $this->md_buku->list_all();
+			//var_dump($data);
+			$this->load->view('admin/dashboard/petugas/master_buku',$data);
+		}else{
+			echo "Access Denied";
+		}
 	}
 	public function listAnggota()
 	{
-		$data['anggota'] = $this->md_ang->list_all();
-		//var_dump($data);
-		$this->load->view('admin/dashboard/petugas/master_anggota',$data);
+		if($this->session->userdata('level')==='1'){
+			$data['anggota'] = $this->md_ang->list_all();
+			//var_dump($data);
+			$this->load->view('admin/dashboard/petugas/master_anggota',$data);
+		}else{
+			echo "Access Denied";
+		}
 	}
 	public function addNew()
 	{
@@ -246,16 +267,24 @@ class Perpustakaan extends CI_Controller {
 	}
 	public function pinjamBuku()
 	{
-		$data['petugas'] = $this->md_pem->petugas();
-		$data['anggota'] = $this->md_pem->anggota();
-		$data['buku'] = $this->md_pem->buku();
-		//var_dump($data);
-		$this->load->view('admin/dashboard/anggota/peminjaman_buku',$data);
+		//if($this->session->userdata('level')==='2'){
+			$data['petugas'] = $this->md_pem->petugas();
+			$data['anggota'] = $this->md_pem->anggota();
+			$data['buku'] = $this->md_pem->buku();
+			//var_dump($data);
+			$this->load->view('admin/dashboard/anggota/peminjaman_buku',$data);
+		// }else{
+		// 	echo "Access Denied";
+		// }
 	}
 	public function riwayatPeminjam()
 	{
-		$data['peminjam'] = $this->md_pem->list_all();
-		$this->load->view('admin/dashboard/anggota/riwayat_peminjaman',$data);
+		//if($this->session->userdata('level')==='2'){
+			$data['peminjam'] = $this->md_pem->list_all();
+			$this->load->view('admin/dashboard/anggota/riwayat_peminjaman',$data);
+		// }else{
+		// 	echo "Access Denied";
+		// }
 	}
 	public function peminjaman()
 	{
