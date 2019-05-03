@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2019 at 11:53 AM
+-- Generation Time: May 04, 2019 at 01:31 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -65,7 +65,8 @@ CREATE TABLE `buku` (
 INSERT INTO `buku` (`Kd_Register`, `JudulBuku`, `Pengarang`, `Penerbit`, `TahunTerbit`) VALUES
 (1, 'Kalkulus', 'WahyuGuna', 'SIDU', 2019),
 (5, 'Kalkulus', 'WahyuGuna', 'SIDU', 2020),
-(6, 'PHP', 'Wahyu Guna Mantap', 'Mantap Club', 2015);
+(6, 'PHP', 'Wahyu Guna Mantap', 'Mantap Club', 2015),
+(7, 'JS', 'aku', 'dia', 2020);
 
 -- --------------------------------------------------------
 
@@ -86,7 +87,9 @@ CREATE TABLE `detail_pinjam` (
 
 INSERT INTO `detail_pinjam` (`Kd_register`, `Kd_pinjam`, `Tgl_pinjam`, `Tgl_kembali`) VALUES
 (1, 4, '2019-04-27', '2019-04-27'),
-(6, 5, '2019-04-27', NULL);
+(6, 5, '2019-04-27', NULL),
+(1, 6, '2019-05-04', '2019-05-04'),
+(6, 7, '2019-05-04', NULL);
 
 -- --------------------------------------------------------
 
@@ -106,7 +109,9 @@ CREATE TABLE `peminjaman` (
 
 INSERT INTO `peminjaman` (`Kd_pinjam`, `Kd_anggota`, `Kd_petugas`) VALUES
 (4, 1, 2),
-(5, 2, 1);
+(5, 2, 1),
+(6, 2, 1),
+(7, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -117,16 +122,42 @@ INSERT INTO `peminjaman` (`Kd_pinjam`, `Kd_anggota`, `Kd_petugas`) VALUES
 CREATE TABLE `petugas` (
   `Kd_Petugas` int(11) NOT NULL,
   `Nama` varchar(225) NOT NULL,
-  `Alamat` text NOT NULL
+  `Alamat` text NOT NULL,
+  `username` varchar(225) NOT NULL,
+  `password` varchar(225) NOT NULL,
+  `last_login` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `petugas`
 --
 
-INSERT INTO `petugas` (`Kd_Petugas`, `Nama`, `Alamat`) VALUES
-(1, 'Wahyu', 'Jl.Astasura'),
-(2, 'Agus', 'Jl.Antasura');
+INSERT INTO `petugas` (`Kd_Petugas`, `Nama`, `Alamat`, `username`, `password`, `last_login`) VALUES
+(1, 'Wahyu', 'Jl.Astasura', 'wahyu', 'e10adc3949ba59abbe56e057f20f883e', '2019-05-04'),
+(2, 'Agus', 'Jl.Antasura', 'agus', 'e10adc3949ba59abbe56e057f20f883e', '0000-00-00'),
+(5, 'Alt24', 'astasura', 'alit', 'e10adc3949ba59abbe56e057f20f883e', '2019-05-04');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_user`
+--
+
+CREATE TABLE `tb_user` (
+  `id` int(11) NOT NULL,
+  `username` varchar(225) NOT NULL,
+  `password` varchar(225) NOT NULL,
+  `level` tinyint(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tb_user`
+--
+
+INSERT INTO `tb_user` (`id`, `username`, `password`, `level`) VALUES
+(1, 'wahyu', 'e10adc3949ba59abbe56e057f20f883e', 1),
+(2, 'agus', 'e10adc3949ba59abbe56e057f20f883e', 1),
+(5, 'alit', 'e10adc3949ba59abbe56e057f20f883e', 1);
 
 --
 -- Indexes for dumped tables
@@ -157,6 +188,12 @@ ALTER TABLE `petugas`
   ADD PRIMARY KEY (`Kd_Petugas`);
 
 --
+-- Indexes for table `tb_user`
+--
+ALTER TABLE `tb_user`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -170,19 +207,19 @@ ALTER TABLE `anggota`
 -- AUTO_INCREMENT for table `buku`
 --
 ALTER TABLE `buku`
-  MODIFY `Kd_Register` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `Kd_Register` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `peminjaman`
 --
 ALTER TABLE `peminjaman`
-  MODIFY `Kd_pinjam` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `Kd_pinjam` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `petugas`
 --
 ALTER TABLE `petugas`
-  MODIFY `Kd_Petugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Kd_Petugas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
