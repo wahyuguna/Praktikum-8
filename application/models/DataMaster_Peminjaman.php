@@ -3,15 +3,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class DataMaster_Peminjaman extends CI_Model {
 
-	public function list_all() {
-		$data = $this->db->select('pem.*,dp.*,p.nama as petugas, a.nama as anggota,b.*')
+	public function list_all($number,$offset) {	
+		$data = $this->db->select('pem.*,dp.*,p.nama as petugas, a.nama as anggota,b.*',$number,$offset)
 					 ->from('peminjaman as pem')
 					 ->join('detail_pinjam as dp','pem.Kd_pinjam = dp.Kd_pinjam')
 					 ->join('petugas as p','pem.Kd_petugas = p.Kd_Petugas')
 					 ->join('anggota as a','pem.Kd_anggota = a.Kd_Anggota')
 					 ->join('buku as b','dp.Kd_register = b.Kd_Register')
+					 ->limit($number,$offset)
 					 ->get();
 		return $data->result();
+	}
+	public function jumlah_data()
+	{
+		return $this->db->get('peminjaman')->num_rows();
 	}
 	public function petugas()
 	{

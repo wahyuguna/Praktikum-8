@@ -21,7 +21,7 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="<?php echo base_url('Perpustakaan/pinjamBuku')?>"><i class="fa fa-circle-o"></i>Pinjam Buku</a></li>
-            <li><a href="<?php echo base_url('Perpustakaan/riwayatPeminjam')?>"><i class="fa fa-circle-o"></i>Riwayat Peminjaman Buku</a></li>
+            <li><a href="<?php echo base_url('index.php/Perpustakaan/riwayatPeminjam')?>"><i class="fa fa-circle-o"></i>Riwayat Peminjaman Buku</a></li>
           </ul>
         </li>
       </ul>

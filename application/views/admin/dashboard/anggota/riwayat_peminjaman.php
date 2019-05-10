@@ -3,6 +3,37 @@
 <?php $this->load->view('admin/layoutA/head') ?>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
+  <style type="text/css">
+  #myInput {
+    background-image: url('<?=base_url('assets')?>/searchicon.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 20px 12px 40px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+  }
+  #myTable {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #ddd;
+    font-size: 18px;
+  }
+
+  #myTable th, #myTable td {
+    text-align: left;
+    padding: 12px;
+  }
+
+  #myTable tr {
+    border-bottom: 1px solid #ddd;
+  }
+
+  #myTable tr.header, #myTable tr:hover {
+    background-color: #f1f1f1;
+  }
+  </style>
 
   <?php $this->load->view('admin/layoutA/header') ?>
   <!-- Left side column. contains the logo and sidebar -->
@@ -43,8 +74,9 @@
                   </h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                  <table id="dataBuku" class="table table-bordered table-hover">
+                  <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for Nama Peminjam . . . ." title="Type in a name">
 
+                  <table id="myTable" class="table table-bordered table-hover">
                     <thead>
                       <tr>
                         <th>No</th>
@@ -57,7 +89,8 @@
                     </thead>
                     <tbody>
                      <?php
-                     $i = 1;
+                     $i = $this->uri->segment('3') + 1;
+                     //$i = 1;
                      foreach ($peminjam as $item){  ?>
                       <tr>
                         <td><?=$i++;?></td>
@@ -78,17 +111,10 @@
                       </tr>
                       <?php } ?>
                     </tbody>
-                    <tfoot>
-                      <tr>
-                        <th>No</th>
-                        <th>Nama Peminjam</th>
-                        <th>Petugas Yang Melayani</th>
-                        <th>Judul Buku</th>
-                        <th>Tanggal Peminjaman</th>
-                        <th>Tanggal Mengembalikan</th>
-                      </tr>
-                    </tfoot>
                   </table>
+                  <?php 
+                    echo $this->pagination->create_links();
+                  ?>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
 
@@ -111,10 +137,29 @@
     <script src="<?=base_url('assets/admin/plugins')?>/datatables/dataTables.bootstrap.min.js"></script>
 
     <script>
-      $(function () {
-        $('#dataBuku').DataTable({"pageLength": 10});
-      });
+      // $(function () {
+      //   $('#dataBuku').DataTable({"pageLength": 10});
+      // });
 
+    function myFunction() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+      //alert(tr.length);
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }       
+      }
+    }
     </script>
 
 @endsection
