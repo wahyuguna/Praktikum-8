@@ -135,9 +135,9 @@ class Perpustakaan extends CI_Controller {
 			redirect( base_url() );
 		}
 
-		if( empty($this->uri->segment('4'))) {
-			redirect( base_url() );
-		}
+		// if( empty($this->uri->segment('4'))) {
+		// 	redirect( base_url() );
+		// }
 
 		$cek = $this->uri->segment('3');
 		$id = $this->uri->segment('4');

@@ -109,7 +109,7 @@
                       </div>
                       <div class="modal-body">
 
-                          <form class="form-horizontal" method="POST" action="<?php echo base_url('Perpustakaan/addNew/buku');?>" enctype="multipart/form-data">
+                          <form id="insert_barang" class="form-horizontal" enctype="multipart/form-data">
                               <div class="form-group">
                                   <label class="col-md-4 control-label">Judul Buku</label>
                                   <div class="col-md-6 has-error">
@@ -140,7 +140,7 @@
                               </div>
                               <div class="form-group">
                                   <div class="col-md-6 col-md-offset-4">
-                                      <button type="submit" class="btn btn-primary" id="button-reg">
+                                      <button type="submit" class="btn btn-primary insert" id="button-reg" id="insert">
                                           Simpan
                                       </button>
                                   </div>
@@ -162,7 +162,7 @@
                       </div>
                       <div class="modal-body">
 
-                          <form class="form-horizontal" method="POST" action="<?php echo base_url('Perpustakaan/update/buku');?>" enctype="multipart/form-data">
+                          <form id="update_barang" class="form-horizontal" enctype="multipart/form-data">
                               <input type="hidden" name="id">
                               <div class="form-group">
                                   <label class="col-md-4 control-label">Judul Buku</label>
@@ -194,7 +194,7 @@
                               </div>
                               <div class="form-group">
                                   <div class="col-md-6 col-md-offset-4">
-                                      <button type="submit" class="btn btn-primary" id="button-reg">
+                                      <button type="submit" class="btn btn-primary update" id="button-reg">
                                           Simpan
                                       </button>
                                   </div>
@@ -221,6 +221,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="<?=base_url('assets/admin/plugins')?>/datatables/jquery.dataTables.min.js"></script>
     <script src="<?=base_url('assets/admin/plugins')?>/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
 
     <script>
       $(function () {
@@ -260,7 +261,38 @@
         });
 
       });
+      $(document).ready(function() {
+        $('.insert').click(function(){
+            // alert('aasasas');
+             $.ajax({
+               url : "<?php echo base_url('Perpustakaan/addNew/buku');?>", 
+               type: "POST", 
+               data: $("#insert_barang").serialize(),
+               success: function(data) {
+                  location.reload();
+                }
+             });
+              
+            return false;
+           
+         });
 
+        $('.update').click(function(){
+            // alert('aasasas');
+             $.ajax({
+               url : "<?php echo base_url('Perpustakaan/update/buku');?>", 
+               type: "POST", 
+               data: $("#update_barang").serialize(),
+               success: function(data) {
+                  location.reload();
+                }
+             });
+              
+            return false;
+           
+         });
+      });
+      
     </script>
 
 @endsection
